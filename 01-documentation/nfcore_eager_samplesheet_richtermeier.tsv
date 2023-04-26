@@ -1,0 +1,8 @@
+Sample_Name	Library_ID	Lane	Colour_Chemistry	SeqType	Organism	Strandedness	UDG_Treatment	R1	R2	BAM
+ERS4181285	ERR3761408	1	4	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR3761408_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR3761408_2.fastq.gz	NA
+ERS4181285	ERR3761409	1	4	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR3761409_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR3761409_2.fastq.gz	NA
+SRS5300638	SRR12557704	1	4	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/SRR12557704_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/SRR12557704_2.fastq.gz	NA
+ERS7649027	ERR6862853	1	4	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR6862853_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR6862853_2.fastq.gz	NA
+ERS7649028	ERR6862854	1	4	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR6862854_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR6862854_2.fastq.gz	NA
+ERS11453815	ERR9465629	1	2	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR9465629_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR9465629_2.fastq.gz	NA
+ERS11453816	ERR9465630	1	2	PE	Dummy	double	none	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR9465630_1.fastq.gz	/mnt/archgen/users/richtermeier/teachingproj/03-data/raw_data/ERR9465630_2.fastq.gz	NA
