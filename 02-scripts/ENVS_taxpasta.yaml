@@ -1,0 +1,8 @@
+name: taxpasta
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bioconda::taxpasta=0.3
+  - gzip
