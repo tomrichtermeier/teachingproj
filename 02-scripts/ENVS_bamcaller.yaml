@@ -1,0 +1,9 @@
+name: bamcaller
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - pysam>=0.19
