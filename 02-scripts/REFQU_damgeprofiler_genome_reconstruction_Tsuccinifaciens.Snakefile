@@ -88,7 +88,7 @@ rule bowtie2_index:
 
 rule bowtie2:
     input:
-        lambda wildcards: "tmp/damageprofiles/Tsuccinifaciens.1.bt2" if wildcards.sample[:3] == "SRS" or wildcards.sample[:6] == "ERS418""
+        "tmp/damageprofiles/Tsuccinifaciens.1.bt2"
     output:
         pipe("tmp/damageprofiles/{sample}.sam")
     message: "Align sequences against reference genomes using BowTie2: {wildcards.sample}"
@@ -97,7 +97,7 @@ rule bowtie2:
         mem = 8,
         cores = 8
     params:
-        index = lambda wildcards: "tmp/damageprofiles/Tsuccinifaciens" if wildcards.sample[:3] == "SRS" or wildcards.sample[:6] == "ERS418",
+        index = "tmp/damageprofiles/Tsuccinifaciens",
         pe1 = "03-data/processed_data/{sample}_1.fastq.gz",
         pe2 = "03-data/processed_data/{sample}_2.fastq.gz"
     threads: 8
@@ -157,7 +157,7 @@ rule samtools_calmd:
         mem = 8,
         cores = 1
     params:
-        fa = lambda wildcards: "tmp/damageprofiles/Tsuccinifaciens.fna.gz" if wildcards.sample[:3] == "SRS" or wildcards.sample[:6] == "ERS418"
+        fa = "tmp/damageprofiles/Tsuccinifaciens.fna.gz"
     shell:
         "samtools calmd -b {input} {params.fa} > {output}"
 
