@@ -4,3 +4,4 @@
 conda
 snakemake_tmp
 tmp
+conda_environment.yml
