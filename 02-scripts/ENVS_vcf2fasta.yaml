@@ -1,0 +1,12 @@
+name: vcf2fasta
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python
+  - pip
+  - numpy
+  - pyfastx
+  - pip:
+    - scikit-allel==1.3.5
