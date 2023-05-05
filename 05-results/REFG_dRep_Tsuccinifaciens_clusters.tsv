@@ -1,0 +1,5 @@
+genome	score	completeness	contamination	strain_heterogeneity	size	N50	cluster	taxonomy	tax_confidence	cluster_members	closest_cluster_member	furthest_cluster_member	completeness_metric	contamination_metric
+BritoIL_2016__M2.38.ST__bin.21.fa	101.85	99.30	0.00	0.00	2120276	116856	1_1			3	99.04	98.96	near	none
+GCA_000195275.fa	103.23	100.00	0.00	0.00	2897425	2731853	2_1			5	98.74	98.59	perfect	none
+ZellerG_2014__CCIS35100175ST-4-0__bin.37.fa	100.18	97.55	0.00	0.00	2364040	169947	3_1			3	98.98	98.19	near	none
+SRS5300638.freebayes_conserv.fasta	80.39	84.60	1.30	0.00	3564211	3337976	4_0			1			substantial	low
