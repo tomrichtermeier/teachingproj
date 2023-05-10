@@ -1,0 +1,117 @@
+---
+title: "Comparison of clustering vs phylogenetic analysis"
+author: "Tom Richtermeier"
+date: "May 10, 2023"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+bibliography: Meine_Bibliothek1.bib
+---
+
+
+# Introduction
+<hr>
+The study of ancient DNA offers lots of information about the composition and variety of microorganisms,. Whole genomes can be reconstructed, which has big potential in the field of microbiology. In this report we present the analysis of lake sediment, stool and ice core samples. By using bioinformatics we aim to reconstruct the phylogenetic relationship between different clusters and strains of *Treponema succinifaciens*. *T. succinifaciens* is a typical bacterium found in the human gut microbiome. Its appearance is associated with a tradional lifestyle [@Tadeo2021]. That is the reason why we expect to reconstruct a large amount of the genome. The goal of this report is to reveal new insights on the relationship of *T. succinifaciens* and to highlight the importance of ancient DNA analysis. 
+
+# Methodology
+<hr>
+### Data acquisition and pre-processing
+The samples were obtained from the European Nucleotide Archive (ENA) (www.ebi.ac.uk/ena/browser/view) after the samples were sequenced using Next-Generation Sequencing (NGS). Data with the following run accesion number were used:
+
+* Samples by Nwosu [@nwosuEarlyHumanImpact2023]:
+  + ERR9465629
+  + ERR9465630
+
+* Samples by Rigou [@Rigou2022]:
+  + ERR6862853
+  + ERR6862854
+  
+* Samples by Zape2 [@Zape2019]:
+  + ERR3761408
+  + ERR3761409
+
+
+### Programs and pipelines
+#### Processing sequencing data
+Before analysing the data, all the datasets have to be evaluated and prepared. This was done using the nf-core/eager (version: 2.4.6) [@Yates2021] pipeline. This allows to use the fastqc program, which evaluates the quality of the bases on all reads. In addition to that it removes adapters left over from the NGS and cuts out all low quality bases. After that the samples still contain DNA of the host organism (e.g. human DNA) and contaminations. We ran a program to remove those parts by aligning a human genome to the reads. The parts that matched were then excluded.
+
+#### Taxonomic profiling
+We created a taxonomic profile using Kraken2 (version: 2.1.2) [@Wood2019]. This program aligned our reads against the standard database, which showed all the bacteria found in our samples. It uses a k-mer based approach, which divides the reads in lots of different subsequences. They have the length k and are then compared to the database. In addition to that we used Bracken (version: 2.8) [@Lu2017] as a companion software tool. Bracken is a powerful tool to estimate the abundance of bacteria on a genus and species level.
+
+#### Genome Reconstruction and Dereplication 
+Freebayes (version: v1.3.2-46-g2c1e395) was used to reconstruct the genome. It can identify variants from all aligned reads, also called Single Nucleotide Polymorphisms (SNPs). The probability for every SNPs being real is than calculated to finally create a genome that very likely represents the genome. For the alignment part BowTie2 (version: 1.2.3) [@Langdon2015] was used. <br>
+To analyse genome clusters of *T. succinifaciens*, we used dRep (version: 3.4.3) [@Olm2017]. This is a program, which identifies redundant genomes from our seperately assembled genomes. From each replicative set it chooses the best representative genome. It is a kmer based approach, that is also called MASH clustering. The threshold for identifying clustern in a species is 95% identity and 1% identity for strains. Furthermore it evaluates different metrics for the quality of the genome (e.g. N50, completeness, contamination). The result is a genome, that is more accurate and has a higher quality. 
+
+#### Phylogenetic analysis
+The construction of the phylogenetic tree was done using PhyloPhlAn3 (version: 3.0.67) [@Segata2013]. It aligns marker genes that are typically found in *T. succinifaciens* and creates phylogenetic trees for all aligned genes. This takes advantage of FastANI [@Jain2018], which is a pairwise alignment tool. FastANI is a newer and faster tool than the average nucleotide identifier (ANI) tool. Although this tool is slow for long genomes, the processing time for our data was acceptable. Under the usage of maximum likelihood the best tree is then selected. The marker-gene database for *T. succinifaciens* was downloaded from UniProt (www.uniprot.org/). 
+
+#### Visualization
+For visualizing all the results and creating the trees we used the programming language R (version: 4.0.3) [@Ihaka1996]. This enabled an easy representation of the data and a direct implementation of the results into this report. We used the following libraries: ape (version: 5.6.2), phangorn (version: 2.7.1), ggtree (version: 2.4.2), tidyverse (1.3.2). Those libraries were used to create the phylogenetic trees for the alignment of the marker gene to the reassembled genome. The Neighbour-joining tree method was utilized to show the genetic distances.
+
+# Results and analysis
+<hr>
+
+### PhyloPhlAn3 results
+
+```{r RAxML_bestTree, ,echo=FALSE}
+mySuppressMessages <- function(expr) {
+  invisible(suppressMessages(expr))
+}
+mySuppressMessages(library(tidyverse))
+mySuppressMessages(library(ape))
+mySuppressMessages(library(ggtree))
+
+tre = read.tree("/mnt/archgen/users/richtermeier/teachingproj/04-analysis/phylophlan3/tsuccinifaciens/RAxML_bestTree.genomes_refined.tre")
+ggtree(tre, aes(x,y)) +
+geom_tiplab() +
+xlim(NA,7.5) +
+geom_tree() +
+theme_tree()
+```
+
+Figure 1: Phylogenetic tree of PhyloPhlAn3 results. Beyond all trees created this has the highest likelihood score.
+
+<br>
+The tree presented in Figure 1 shows the best trees among all trees created through PhyloPhlAn3. There are multiple studies having similar *T. succinifaciens* genomes as our reconstructed one. There are a few ingroup branches, which indicate a high similarity and closely related last ancestor. ZellerG_2014__CCIS35100175ST-4-0 & FengQ_2015__SID31160, BritoIL_2016__M2.40.ST & GCA_000195275 and LeChatelierE_2013__MH0189 & SchirmerM_2016__G89199 show this specific kind of relation. CM_madagascar__V07_01_2FE, RampelliS_2015__H10 and BritoIL_2016__M2.38.ST on the other hand are on the very left and share a very distant ancestor. To make statements about their relation on a species level a dendogramm would be needed.
+<br>
+
+![Figure 2: Phylogenetic tree for the reassembled genomes of *T. succinifaciens* that are found in the reference genomes. This tree is based on the alignment to the gene coding for glutamine synthetase catalytic regions](/r1/people/tom_richtermeier/R_scripts/results/AEB13173.png "Title")
+
+<br> 
+Figure 2 shows all genomes that aligned to the glutamine synthetase catalytic region gene. It is a gene, which is involved in the nitrogen metabolism and can be found in *Treponema succinifaciens DSM 2489* . In detail it catalyzes the condensation of glutamate and ammonia to glutamine. With 697 amino acids this gene is rather big for a bacterial gene. The tree shows ingroup relationships between ZellerG_2014__CCIS35100175ST-4-0 & SmitsSA_2017__TZ_65642 and RampelliS_2015__H10 & CM_madagascar__V07_01_2FE. Comparing this to the tree in Figure 1, the basic structure is very similar. Both have these two big branches, although Figure 2 contains less genomes in those big branches. The ingroup relations are not the same. But the genomes that are not in the ingroup are still closely related to the ones that are found in the other figure in the ingroup. One genome that does not include the selected marker gene is the genome from  FengQ_2015__SID31160.
+<br>
+
+![Figure 3: Phylogenetic tree for the reassembled genomes of *T. succinifaciens* that are found in the reference genomes. This tree is based on the alignment to a gene coding for ammonium transporters](/r1/people/tom_richtermeier/R_scripts/results/AEB13176.png "Title")
+
+<br> 
+The genetic relationships shown in Figure 3 are based on the alignment to ammonium transporter. This gene can be found in *Treponema succinifaciens DSM 2489* and consists of 583 amino acids, which is rather big. Ammonium transporters play a big role in the transportation of ammonium ions (NH4<sup>+</sup>) across membranes. This allows them to take up these ions and assimilate them into amino acids. They also play an important role in the nitrogen metabolism. In Figure 3 you can see that this tree again has a structure, where some genomes are on the very left and a few are represented in two bigger branches. There are two ingroup realations between ZellerG_2014__CCIS35100175ST-4-0 & ZellerG_2014__CCIS35100175ST and CM_madagascar__V07_01_2FE & BritoIL_2016__M2.40.ST. The first of these combinations can be found in FIgure X. In total the relations are to a high degree as the ones presented in the other two phylogenetic trees. Every genome that was found by aligning this marker gene was also found in the best tree result (Figure 1).
+<br>
+
+
+
+### dRep results
+
+```{r dRep representatives, echo=FALSE}
+drep_results <- read.table('/r1/people/tom_richtermeier/R_scripts/results/REFG_dRep_Tsuccinifaciens_clusters.tsv', header=TRUE, sep = "\t")
+drep_results <- subset(drep_results, select = c(1,2,3,4,6,8,11,12,14,15))
+knitr::kable(drep_results,  caption = "Table 1: Genome information and quality metrics for representatives of each cluster with the best assembled genome")
+```
+
+<br>
+Table 1 represents all genomes from each cluster, which have the best metrics (e.g completeness, contamination, quality). In total there were 4 clusters found. To belong to a cluster a genome has to have a similarity above 95% percent to belong to that cluster. The first three genomes have a very high completeness score (>97.5%) an no contamination at all. Those are extremely well reconstructed genomes. The SRS5300638 genome on the other hand has a substantial completeness with 84,60% and a low contamination value. This is still a good genome, but not as good as the other ones. <br>
+Additionally these MASH clustering results can be seen in the dendogramm (Figure 4). There are the 4 different clusters shown in different colours. The biggest cluster is created by the read group consisting of 5 members. In the Brackets the second number indicates the strain that was assigned to that genome (e.g. (3_1)). In the case in all groups every member has the same strain. The cutoff for the same strain was set to 97%. This means that all members in the different groups have an identity over 97%. This is a very high identity, so the strains are all very closely related.  
+<br>
+
+
+![Figure 4: Dendogramm tree of dRep results This shows the different clusters and strains of *T. succinifaciens* grouped together. The dotted line indicates the 95% nucleotide identity, which is the threshhold for a cluster.](/r1/people/tom_richtermeier/R_scripts/results/Primary_clustering_dendrogram.png "Title")
+<br>
+
+# Discussion
+<hr>
+In this report we analysed samples, which had high amounts of *T. succinifaciens* in it. As our findings suggest the strains of *T. succinifaciens* in our samples found are highly related. Those might represent a few single subspecies. Throughout the analysis there could not be found any contradictions. Furthermore the data only supported themselves. The clusters presented in Figure 4, can be found in all of the phylogenetic trees (Figures 1-3). The genomes of the studies are almost identical to the ones clustered together with dRep. Although there are slight differences in the ingroups relations, they  are still closely presented and most of the time on the same branch. <br>
+The SRS5300638.freebayes_conserv.fasta genome builds its own cluster (Figure 4, Table 1). This genome can not be found in the phylogenetic trees at all. Reason for this result could be the higher contamination and lower completeness score compared to the other cluster representatives.
+
+# References
+<hr>
