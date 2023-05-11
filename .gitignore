@@ -5,3 +5,11 @@ conda
 snakemake_tmp
 tmp
 conda_environment.yml
+.nextflow.log
+.nextflow.log.1
+.nextflow.log.2
+.nextflow.log.3
+.nextflow.log.4
+.nextflow/
+taxa2core.txt
+taxa2core_cpa201901_up201901.txt.bz2	
